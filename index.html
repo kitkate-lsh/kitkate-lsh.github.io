@@ -374,46 +374,49 @@
             margin: 5px 0;
         }
 
-        /* НОВЫЙ СТИЛЬ: План дня */
-.schedule-section {
+       /* ===== ПЛАН ДНЯ В НОВОМ СТИЛЕ ===== */
+.timing-section {
     padding: 20px 30px 30px;
     text-align: center;
     position: relative;
     z-index: 2;
 }
 
-.section-title {
+.timing-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 28px;
     font-weight: 400;
     color: #4a4a4a;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.timing-item {
     margin-bottom: 25px;
 }
 
-.schedule-list {
-    max-width: 260px;
-    margin: 0 auto;
-}
-
-.schedule-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 12px 0;
-    border-bottom: 1px dashed #D8CFC3;
-}
-
-.schedule-time {
+.timing-time {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: #8C7A6B;
+    font-size: 42px;
+    font-weight: 300;
+    color: #2c2c2c;
+    line-height: 1;
+    margin-bottom: 5px;
 }
 
-.schedule-event {
-    font-size: 14px;
-    color: #555;
+.timing-event {
+    font-size: 13px;
+    color: #8C7A6B;
     font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.timing-separator {
+    width: 40px;
+    height: 1px;
+    background: #D8CFC3;
+    margin: 20px auto;
 }
 
         /* ===== АНИМАЦИИ ПОЯВЛЕНИЯ ===== */
@@ -689,22 +692,27 @@
 
         <div class="divider fade-up"></div>
             
-<!-- НОВЫЙ БЛОК: План дня -->
-<div class="schedule-section fade-up">
-    <div class="section-title">План дня</div>
-    <div class="schedule-list">
-        <div class="schedule-item">
-            <span class="schedule-time">13:40</span>
-            <span class="schedule-event">Регистрация</span>
-        </div>
-        <div class="schedule-item">
-            <span class="schedule-time">16:00</span>
-            <span class="schedule-event">Сбор гостей</span>
-        </div>
-        <div class="schedule-item">
-            <span class="schedule-time">17:00</span>
-            <span class="schedule-event">Банкет</span>
-        </div>
+<!-- ПЛАН ДНЯ В НОВОМ СТИЛЕ (ТАЙМИНГ) -->
+<div class="timing-section fade-up">
+    <div class="timing-title">ПЛАН ДНЯ</div>
+    
+    <div class="timing-item">
+        <div class="timing-time">13:40</div>
+        <div class="timing-event">Регистрация</div>
+    </div>
+    
+    <div class="timing-separator"></div>
+    
+    <div class="timing-item">
+        <div class="timing-time">16:00</div>
+        <div class="timing-event">Сбор гостей</div>
+    </div>
+    
+    <div class="timing-separator"></div>
+    
+    <div class="timing-item">
+        <div class="timing-time">17:00</div>
+        <div class="timing-event">Банкет</div>
     </div>
 </div>
 
