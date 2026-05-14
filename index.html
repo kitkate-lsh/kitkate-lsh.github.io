@@ -515,7 +515,59 @@
     margin-top: 5px;
 }
 
-      
+      /* ===== НОВЫЙ БЛОК: ДЕТАЛИ (БЕСЕДА ВК) ===== */
+.details-section {
+    padding: 20px 30px 30px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    background: #F5EFE8;
+    border-radius: 20px;
+    margin: 10px 20px 20px 20px;
+}
+
+.details-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: #4a4a4a;
+    margin-bottom: 15px;
+}
+
+.details-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.vk-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background: #4C75A3;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.vk-btn:hover {
+    background: #2D5A8C;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(44, 90, 140, 0.3);
+}
+
+.vk-icon {
+    font-size: 18px;
+    font-weight: bold;
+}
 
         /* ===== АНИМАЦИИ ПОЯВЛЕНИЯ ===== */
         .fade-up {
@@ -878,12 +930,24 @@
     </div>
     <a href="https://forms.google.com/your-form-link" target="_blank" class="form-btn">Перейти к анкете →</a>
 </div>
+
+            <!-- НОВЫЙ БЛОК: ДЕТАЛИ (БЕСЕДА ВК) -->
+<div class="details-section fade-up">
+    <div class="details-title">Детали</div>
+    <div class="details-text">
+        Присоединяйтесь к нашей общей беседе во ВКонтакте!<br>
+        Здесь мы будем делиться важной информацией, отвечать на вопросы и создавать праздничное настроение.
+    </div>
+    <a href="-" target="_blank" class="vk-btn">
+        <span class="vk-icon">ВК</span> Присоединиться к беседе
+    </a>
+</div>
         <!-- Подпись -->
         <div class="signature-section fade-up">
             <div class="with-love">С любовью,</div>
             <div class="signature-names">
                 Артём
-                <span class="amp">&</span>
+                <span class="amp">и</span>
                 Екатерина
             </div>
         </div>
