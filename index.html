@@ -468,6 +468,53 @@
     margin: 20px auto;
 }
 
+        /* ===== КРАСИВЫЕ БЛОКИ ДЛЯ МЕСТА ПРОВЕДЕНИЯ ===== */
+.location-card {
+    background: #F5EFE8;
+    border-radius: 20px;
+    padding: 20px 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.location-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.location-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #8C7A6B;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.location-icon {
+    font-size: 22px;
+}
+
+.location-divider {
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #C0B090, transparent);
+    margin: 15px auto;
+}
+
+.location-card .location-address {
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.location-card .map-btn {
+    margin-top: 5px;
+}
+
       
 
         /* ===== АНИМАЦИИ ПОЯВЛЕНИЯ ===== */
@@ -754,13 +801,47 @@
     </div>
 </div>
 
-        <!-- Место проведения -->
+            <!-- Место проведения (красивый блок) -->
+<div class="location-section fade-up">
+    <div class="section-title">Место торжества</div>
+    
+    <!-- Блок 1: Регистрация в ЗАГСе -->
+    <div class="location-card">
+        <div class="location-card-title">
+            <span class="location-icon">💍</span>
+            Регистрация в ЗАГСе
+        </div>
+        <div class="location-address">
+            ул. Олеко Дундича, 23
+        </div>
+        <a href="https://yandex.ru/maps/-/CPgSfGMy" target="_blank" class="map-btn">Посмотреть на карте</a>
+    </div>
+    
+    <!-- Разделитель между блоками -->
+    <div class="location-divider"></div>
+    
+    <!-- Блок 2: Сбор гостей и банкет -->
+    <div class="location-card">
+        <div class="location-card-title">
+            <span class="location-icon">🍽️</span>
+            Сбор гостей и банкет
+        </div>
+        <div class="location-address">
+            г. Воронеж, ул. Острогожская, 155Б<br>
+            Ресторан "НАБЕРЕЖНАЯ №1"
+        </div>
+        <a href="https://yandex.ru/maps/-/CPg7eXiJ" target="_blank" class="map-btn">Посмотреть на карте</a>
+    </div>
+</div>
+
+        <!-- Место проведения 
         <div class="location-section fade-up">
             <div class="section-title">Место торжества</div>
             <div class="text-section fade-up">
                 <div class="timing-event">Регистрация в ЗАГСе</div>
                 <p>
-                    Приглашаем всех желающих на церемонию официальной регистрации брака по адресу: <\p>
+                    Приглашаем всех желающих на церемонию официальной регистрации брака по адресу: 
+                    <\p>
                      <div class="location-address">
 ул. Олеко Дундича, 23 </div>
                 <a href="https://yandex.ru/maps/-/CPgSfGMy" target="_blank" class="map-btn">Посмотреть на карте</a>
@@ -774,7 +855,7 @@
                 Ресторан "НАБЕРЕЖНАЯ №1"
             </div>
             <a href="https://yandex.ru/maps/-/CPg7eXiJ" target="_blank" class="map-btn">Посмотреть на карте</a>
-        </div>
+        </div> -->
 
         <div class="divider fade-up"></div>
 
