@@ -597,6 +597,25 @@
     font-weight: 300;
     text-align: center;
 }
+        /* Поле комментария (textarea) */
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #D8CFC3;
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #555;
+    background: white;
+    outline: none;
+    transition: border-color 0.3s;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-textarea:focus {
+    border-color: #8C7A6B;
+}
 
 /* Кнопка отправки */
 .form-btn {
@@ -1112,6 +1131,11 @@
                 * Выберите все варианты, которые вам интересны
             </div>
         </div>
+         <!-- НОВОЕ ПОЛЕ: Комментарий -->
+    <div class="form-group">
+        <label class="form-label">Комментарий (пожелания, особые предпочтения)</label>
+        <textarea name="Комментарий" class="form-textarea" rows="3" placeholder="Напишите здесь всё, что мы должны знать..."></textarea>
+    </div>
 
         <button type="submit" class="form-btn" id="submitBtn">📝 Отправить ответы</button>
         <div id="submitStatus" class="submit-status"></div>
@@ -1255,6 +1279,8 @@ if (form) {
         document.querySelectorAll('input[name="Напитки"]:checked').forEach(cb => {
             drinks.push(cb.value);
         });
+        // НОВОЕ: Собираем комментарий
+const comment = document.querySelector('textarea[name="Комментарий"]')?.value.trim() || 'Не указан';
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner-small"></span> Отправка...';
@@ -1271,7 +1297,8 @@ if (form) {
                 body: JSON.stringify({
                     name: guestName,
                     attendance: attendance.value,
-                    drinks: drinks.join(', ')
+                    drinks: drinks.join(', '),
+                    comment: comment   // ← добавить эту строку
                 })
             });
             
