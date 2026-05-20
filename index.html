@@ -1217,43 +1217,7 @@
             }
         });
 
-    // ===== ОТПРАВКА В ЯНДЕКС ФОРМУ =====
-// ID вашей формы
-const FORM_ID = '6a0db4cae010db6da37ba790';
-
-// ⚠️ ВАЖНО: Замените эти ключи на реальные ID полей из вашей формы!
-// Как узнать ID полей:
-// 1. Откройте форму в режиме редактирования
-// 2. Нажмите F12 → вкладка Elements (или просмотр кода)
-// 3. Найдите тег input и скопируйте значение атрибута name или data-key
-const guestName = document.querySelector('input[name="guestName"]').value.trim();
-if (!guestName) {
-    statusDiv.textContent = '❌ Пожалуйста, представьтесь (напишите ваше имя)';
-    // ...
-}    
-const FIELD_ATTENDANCE = 'answer_choices_9008978540177352';   // ID поля для присутствия
-const FIELD_DRINKS = 'answer_choices_9008978537787196';           // ID поля для напитков
-
-// URL для отправки
-const FORM_API_URL = `https://api.web-forms.ru/submit/${FORM_ID}`;
-
-// Функция отправки данных
-async function sendToYandexForm(formData) {
-    const response = await fetch(FORM_API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    });
-    
-    if (!response.ok) {
-        throw new Error(`Ошибка HTTP: ${response.status}`);
-    }
-    return response;
-}
-
-// Обработчик отправки формы
+    // ОТПРАВКА В ЯНДЕКС ФОРМУ ЧЕРЕЗ API
 document.getElementById('guestForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -1261,59 +1225,75 @@ document.getElementById('guestForm').addEventListener('submit', async (e) => {
     const statusDiv = document.getElementById('submitStatus');
     const originalText = submitBtn.innerHTML;
     
-    // Проверяем, выбран ли вариант присутствия
+    // Собираем данные
+    const guestName = document.querySelector('input[name="guestName"]').value.trim();
     const attendance = document.querySelector('input[name="attendance"]:checked');
-    if (!attendance) {
-        statusDiv.textContent = '❌ Пожалуйста, подтвердите ваше присутствие';
+    const drinks = [];
+    document.querySelectorAll('input[name="drinks"]:checked').forEach(cb => drinks.push(cb.value));
+    
+    if (!guestName) {
+        statusDiv.textContent = '❌ Пожалуйста, напишите ваше имя';
         statusDiv.className = 'submit-status error';
         statusDiv.style.display = 'block';
         setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         return;
     }
     
-    // Собираем выбранные напитки
-    const drinks = [];
-    document.querySelectorAll('input[name="drinks"]:checked').forEach(cb => {
-        drinks.push(cb.value);
-    });
+    if (!attendance) {
+        statusDiv.textContent = '❌ Пожалуйста, подтвердите присутствие';
+        statusDiv.className = 'submit-status error';
+        statusDiv.style.display = 'block';
+        setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+        return;
+    }
     
-    // Формируем данные для Яндекс Формы
-    // Замените ключи на реальные ID полей из вашей формы
-    const formData = {
-        [FIELD_ATTENDANCE]: attendance.value,
-        [FIELD_DRINKS]: drinks.join(', ')
-    };
-    
-    // Показываем загрузку
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner-small"></span> Отправка...';
     statusDiv.style.display = 'none';
     
     try {
-        // Отправляем данные
-        await sendToYandexForm(formData);
+        // ⚠️ ВАЖНО: Вам нужно получить ID полей из вашей формы!
+        // Откройте форму → F12 → найдите теги input с атрибутом name
+        const FORM_ID = '6a0db4cae010db6da37ba790';
         
-        // Успех
-        statusDiv.textContent = '✅ Спасибо! Ваши ответы успешно отправлены!';
-        statusDiv.className = 'submit-status success';
-        statusDiv.style.display = 'block';
+        // Эти ID нужно заменить на реальные из вашей формы!
+        // ID полей выглядят как: answer_choices_9008978540177352
+        const formData = {
+            'answer_attendance': answer_choices_9008978540177352,   // замените на реальный ID
+            'answer_drinks': answer_choices_9008978537787196,      // замените на реальный ID
+            'answer_name': answer_short_text_9008978538383712                 // замените на реальный ID
+        };
         
-        // Очищаем форму
-        document.querySelectorAll('input[name="attendance"]').forEach(r => r.checked = false);
-        document.querySelectorAll('input[name="drinks"]').forEach(cb => cb.checked = false);
+        // URL для отправки в Яндекс Форму
+        const response = await fetch(`https://api.forms.yandex.net/v1/surveys/${FORM_ID}/form`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
         
-        setTimeout(() => {
-            statusDiv.style.display = 'none';
-        }, 5000);
-        
+        if (response.ok) {
+            statusDiv.textContent = '✅ Спасибо! Ваши ответы отправлены!';
+            statusDiv.className = 'submit-status success';
+            statusDiv.style.display = 'block';
+            
+            // Очищаем форму
+            document.querySelector('input[name="guestName"]').value = '';
+            document.querySelectorAll('input[name="attendance"]').forEach(r => r.checked = false);
+            document.querySelectorAll('input[name="drinks"]').forEach(cb => cb.checked = false);
+        } else {
+            throw new Error('Ошибка отправки');
+        }
     } catch (error) {
-        console.error('Ошибка отправки:', error);
-        statusDiv.textContent = '❌ Ошибка отправки. Пожалуйста, попробуйте ещё раз или свяжитесь с нами напрямую.';
+        console.error('Ошибка:', error);
+        statusDiv.textContent = '❌ Ошибка отправки. Попробуйте ещё раз.';
         statusDiv.className = 'submit-status error';
         statusDiv.style.display = 'block';
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
+        setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
     }
 });
            </script>
