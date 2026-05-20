@@ -1222,7 +1222,7 @@
             }
         });
 
- // ===== ОТПРАВКА ФОРМЫ =====
+// ===== ОТПРАВКА В GOOGLE APPS SCRIPT =====
 const form = document.getElementById('guestForm');
 const submitBtn = document.getElementById('submitBtn');
 const statusDiv = document.getElementById('submitStatus');
@@ -1232,7 +1232,7 @@ if (form) {
         e.preventDefault();
         
         const originalText = submitBtn.innerHTML;
-
+        
         // Проверяем имя
         const guestName = document.querySelector('input[name="Имя гостя"]')?.value.trim();
         if (!guestName) {
@@ -1253,26 +1253,38 @@ if (form) {
             return;
         }
 
+        // Собираем напитки
+        const drinks = [];
+        document.querySelectorAll('input[name="Напитки"]:checked').forEach(cb => {
+            drinks.push(cb.value);
+        });
+
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner-small"></span> Отправка...';
         statusDiv.style.display = 'none';
 
         try {
-            const response = await fetch(form.action, {
+            // 🔴 ВСТАВЬТЕ ВАШ URL ОТ APPS SCRIPT (из ШАГА 2):
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyaLeyDvl-8We4Mcr4u6sZAId6vrBurlCXfrag_NJDnLsDBc60iIF9gvbUZRXKSCmIA1Q/exec';
+            
+            const response = await fetch(scriptURL, {
                 method: 'POST',
-                body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: guestName,
+                    attendance: attendance.value,
+                    drinks: drinks.join(', ')
+                })
             });
-
-            if (response.ok) {
-                statusDiv.textContent = '✅ Спасибо! Ваши ответы успешно отправлены!';
-                statusDiv.className = 'submit-status success';
-                statusDiv.style.display = 'block';
-                form.reset();
-            } else {
-                throw new Error('Ошибка сервера');
-            }
+            
+            statusDiv.textContent = '✅ Спасибо! Ваши ответы отправлены!';
+            statusDiv.className = 'submit-status success';
+            statusDiv.style.display = 'block';
+            form.reset();
+            
         } catch (error) {
+            console.error('Ошибка:', error);
             statusDiv.textContent = '❌ Ошибка отправки. Попробуйте ещё раз.';
             statusDiv.className = 'submit-status error';
             statusDiv.style.display = 'block';
