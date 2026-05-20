@@ -1183,45 +1183,70 @@
     </div>
 <div class="divider fade-up"></div>
     <script>
-        // ===== ФУНКЦИЯ СКАЧИВАНИЯ PDF =====
-        function downloadPDF() {
-            const element = document.getElementById('invitationContent');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            
-            // Показываем индикатор загрузки
-            loadingOverlay.classList.add('show');
-            
-            // Конфигурация PDF
-            const opt = {
-                margin: 0,
-                filename: 'priglashenie-na-svadbu-Artem-i-Ekaterina.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true,
-                    logging: false
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
-                    orientation: 'portrait',
-                    compress: true
-                }
-            };
-
-            // Генерируем PDF
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Скрываем индикатор после сохранения
-                setTimeout(() => {
-                    loadingOverlay.classList.remove('show');
-                }, 500);
-            }).catch(err => {
-                console.error('Ошибка при создании PDF:', err);
-                loadingOverlay.classList.remove('show');
-                alert('Произошла ошибка при создании PDF. Попробуйте ещё раз.');
-            });
+        // ===== ФУНКЦИЯ СКАЧИВАНИЯ PDF (из внешнего файла) =====
+async function downloadPDF() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
+    // Показываем индикатор загрузки
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('show');
+    }
+    
+    try {
+        // 🔴 ВСТАВЬТЕ ССЫЛКУ НА ВАШ ФАЙЛ ЗДЕСЬ 👇
+        const response = await fetch('wedding-design.html');
+        
+        if (!response.ok) {
+            throw new Error('Файл не найден');
         }
+        
+        const htmlContent = await response.text();
+        
+        // Создаём временный элемент для парсинга HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlContent;
+        
+        // Находим блок с приглашением в загруженном файле
+        const invitationContent = tempDiv.querySelector('#invitationContent');
+        
+        if (!invitationContent) {
+            throw new Error('Блок #invitationContent не найден в файле');
+        }
+        
+        // Конфигурация PDF
+        const opt = {
+            margin: [0.5, 0.5, 0.5, 0.5],
+            filename: 'priglashenie-na-svadbu-Artem-i-Ekaterina.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2.5,
+                useCORS: true,
+                letterRendering: true,
+                logging: false
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'portrait',
+                compress: true
+            }
+        };
+        
+        // Генерируем и скачиваем PDF
+        await html2pdf().set(opt).from(invitationContent).save();
+        
+    } catch (error) {
+        console.error('Ошибка при создании PDF:', error);
+        alert('Произошла ошибка при создании PDF. Файл wedding-design.html не найден.');
+    } finally {
+        // Скрываем индикатор после сохранения
+        if (loadingOverlay) {
+            setTimeout(() => {
+                loadingOverlay.classList.remove('show');
+            }, 500);
+        }
+    }
+}
 
         // ===== Анимация появления элементов при скролле =====
         const observer = new IntersectionObserver((entries) => {
