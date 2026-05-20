@@ -1183,17 +1183,16 @@
     </div>
 <div class="divider fade-up"></div>
     <script>
-        // ===== ФУНКЦИЯ СКАЧИВАНИЯ PDF (из внешнего файла) =====
+       // ===== ФУНКЦИЯ СКАЧИВАНИЯ PDF =====
 async function downloadPDF() {
     const loadingOverlay = document.getElementById('loadingOverlay');
     
-    // Показываем индикатор загрузки
     if (loadingOverlay) {
         loadingOverlay.classList.add('show');
     }
     
     try {
-        // 🔴 ВСТАВЬТЕ ССЫЛКУ НА ВАШ ФАЙЛ ЗДЕСЬ 👇
+        // Загружаем файл с красивым дизайном
         const response = await fetch('wedding-design.html');
         
         if (!response.ok) {
@@ -1202,21 +1201,21 @@ async function downloadPDF() {
         
         const htmlContent = await response.text();
         
-        // Создаём временный элемент для парсинга HTML
+        // Создаём временный элемент
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
         
-        // Находим блок с приглашением в загруженном файле
+        // Находим блок с контентом для PDF
         const invitationContent = tempDiv.querySelector('#invitationContent');
         
         if (!invitationContent) {
-            throw new Error('Блок #invitationContent не найден в файле');
+            throw new Error('Блок #invitationContent не найден');
         }
         
-        // Конфигурация PDF
+        // Настройки PDF
         const opt = {
             margin: [0.5, 0.5, 0.5, 0.5],
-            filename: 'priglashenie-na-svadbu-Artem-i-Ekaterina.pdf',
+            filename: 'priglashenie_Artem_Ekaterina_2026.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2.5,
@@ -1232,14 +1231,13 @@ async function downloadPDF() {
             }
         };
         
-        // Генерируем и скачиваем PDF
+        // Создаём и скачиваем PDF
         await html2pdf().set(opt).from(invitationContent).save();
         
     } catch (error) {
-        console.error('Ошибка при создании PDF:', error);
-        alert('Произошла ошибка при создании PDF. Файл wedding-design.html не найден.');
+        console.error('Ошибка:', error);
+        alert('Ошибка при создании PDF. Файл wedding-design.html не найден.');
     } finally {
-        // Скрываем индикатор после сохранения
         if (loadingOverlay) {
             setTimeout(() => {
                 loadingOverlay.classList.remove('show');
